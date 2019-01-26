@@ -1,6 +1,8 @@
 // use this one!
-function validWord(sentenceSoFar, word) {
-    return !wordIsNaughty(word);
+async function validWord(sentenceSoFar, word) {
+    let nice = !wordIsNaughty(word);
+    let spelledCorrectly = await wordIsSpelledCorrectly(word);
+    return nice && spelledCorrectly;
 }
 
 
@@ -17,8 +19,8 @@ async function wordIsSpelledCorrectly(word) {
     console.log("URL used: " + joinedURL);
 
     try {
-        const result = await fetch(joinedURL);
-        const parsedResult = await result.json();
+        let result = await fetch(joinedURL);
+        let parsedResult = await result.json();
         return parsedResult.length != 0;
     }
     catch (err) {
@@ -26,4 +28,4 @@ async function wordIsSpelledCorrectly(word) {
     }
 }
 
-console.log(wordIsSpelledCorrectly("imperial").then(result => console.log(result)));
+console.log(validWord("Once upon a time", "imperial").then(result => console.log(result)));
