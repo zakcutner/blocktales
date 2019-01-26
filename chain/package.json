@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/zakcutner/blocktales/issues"
   },
-  "homepage": "https://github.com/zakcutner/blocktales#readme"
+  "homepage": "https://github.com/zakcutner/blocktales#readme",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
 }
