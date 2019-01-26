@@ -1,8 +1,20 @@
-let { genesis } = require('./block');
+let { Block, genesis } = require('./block');
 
 class Ledger {
   constructor() {
     this.ledger = [genesis];
+  }
+
+  static fromJSON(json) {
+    let ledger = new Ledger();
+
+    for (let jsonBlock of json) {
+      if (!ledger.addBlock(Block.fromJSON(jsonBlock))) {
+        return false;
+      }
+    }
+
+    return ledger;
   }
 
   addBlock(block) {
@@ -16,5 +28,9 @@ class Ledger {
     this.ledger.push(block);
 
     return true;
+  }
+
+  toJSON() {
+    return JSON.stringify(this.ledger.slice(1));
   }
 }
