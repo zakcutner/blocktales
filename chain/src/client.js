@@ -7,7 +7,8 @@ const KNOWN_PEER = "main";
 const CONNECTION_OPTIONS = {
   host: "broker.blocktales.ml",
   port: 80,
-  path: "/"
+  path: "/",
+  proxied: true
 };
 
 let miner = new Worker();
