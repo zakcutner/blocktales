@@ -94,8 +94,15 @@ class Client {
       return;
     }
 
-    this.fringe.push(peer);
+
     let connection = this.peer.connect(peer);
+
+    if (!connection) {
+      setTimeout(() => _connect(peer), 1000);
+      return;
+    }
+
+    this.fringe.push(peer);
 
     connection.on("open", () => {
       removeFromArray(this.fringe, connection.peer);
@@ -186,7 +193,7 @@ class Client {
       removeFromArray(this.connections, connection);
       removeFromArray(this.peers, connection.peer);
 
-      this._connect(connection.peer);
+      // this._connect(connection.peer);
     });
 
     connection.on("error", console.error);
