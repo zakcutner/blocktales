@@ -26,7 +26,7 @@ class Block {
     return hash(JSON.stringify(this)).toString();
   }
 
-  get validHash() {
+  get isValid() {
     return this.hash.startsWith('0'.repeat(DIFFICULTY));
   }
 }

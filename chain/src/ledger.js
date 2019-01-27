@@ -18,10 +18,7 @@ class Ledger {
   }
 
   addBlock(block) {
-    let prevBlock = ledger[-1];
-
-    // TODO: verify data validity
-    if (prevBlock.hash !== block.prevHash || prevBlock.height + 1 !== block.height || !block.validHash) {
+    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid) {
       return false;
     }
 
@@ -30,7 +27,17 @@ class Ledger {
     return true;
   }
 
-  toJSON() {
+  get lastBlock() {
+    return this.ledger[this.ledger.length - 1];
+  }
+
+  get height() {
+    return this.lastBlock.height;
+  }
+
+  get blocks() {
     return JSON.stringify(this.ledger.slice(1));
   }
 }
+
+module.exports = { Ledger };

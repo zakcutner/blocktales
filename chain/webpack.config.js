@@ -11,6 +11,15 @@ module.exports = {
     index: "./index.js"
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      }
+    ]
+  },
+
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].min.js"
