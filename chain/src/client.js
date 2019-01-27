@@ -1,13 +1,13 @@
-const Peer = require('peerjs');
-const { Block } = require('./block');
-const { Ledger } = require('./ledger');
-const Worker = require('./miner.worker');
+const Peer = require("peerjs");
+const { Block } = require("./block");
+const { Ledger } = require("./ledger");
+const Worker = require("./miner.worker");
 
-const KNOWN_PEER = 'main';
+const KNOWN_PEER = "main";
 const CONNECTION_OPTIONS = {
-  host: '138.68.146.75',
-  port: 8000,
-  path: '/'
+  host: "broker.blocktales.ml",
+  port: 80,
+  path: "/"
 };
 
 let miner = new Worker();
@@ -37,7 +37,7 @@ class Client {
       this.peer = new Peer(CONNECTION_OPTIONS);
     }
 
-    this.peer.on('open', id => {
+    this.peer.on("open", id => {
       this.name = id;
 
       if (this.name !== KNOWN_PEER) {
@@ -45,20 +45,22 @@ class Client {
       }
     });
 
-    this.peer.on('connection', connection => {
+    this.peer.on("connection", connection => {
       this._connection_callback(connection);
     });
 
-    miner.addEventListener('message', async event => {
+    miner.addEventListener("message", async event => {
       let block = Block.fromJSON(event.data);
 
       if (await this.ledger.addBlock(block)) {
         this.wordCallback(block.data);
 
-        this._broadcast(JSON.stringify({
-          type: 'block',
-          block: event.data
-        }));
+        this._broadcast(
+          JSON.stringify({
+            type: "block",
+            block: event.data
+          })
+        );
       }
     });
   }
@@ -66,10 +68,12 @@ class Client {
   mineWord(word) {
     let block = new Block(this.ledger.lastBlock, word);
 
-    this._broadcast(JSON.stringify({
-      type: 'suggestion',
-      word: word
-    }));
+    this._broadcast(
+      JSON.stringify({
+        type: "suggestion",
+        word: word
+      })
+    );
 
     miner.postMessage(block);
   }
@@ -81,18 +85,22 @@ class Client {
   }
 
   _connect(peer) {
-    if (this.peers.includes(peer) || this.fringe.includes(peer) || peer === this.name) {
+    if (
+      this.peers.includes(peer) ||
+      this.fringe.includes(peer) ||
+      peer === this.name
+    ) {
       return;
     }
 
     this.fringe.push(peer);
     let connection = this.peer.connect(peer);
 
-    connection.on('open', () => {
+    connection.on("open", () => {
       removeFromArray(this.fringe, connection.peer);
       this._connection_callback(connection);
 
-      connection.send(JSON.stringify({ type: 'ready' }));
+      connection.send(JSON.stringify({ type: "ready" }));
     });
   }
 
@@ -100,26 +108,30 @@ class Client {
     this.peers.push(connection.peer);
     this.connections.push(connection);
 
-    connection.on('data', async data => {
+    connection.on("data", async data => {
       let obj = JSON.parse(data);
 
       switch (obj.type) {
-        case 'ready':
-          connection.send(JSON.stringify({
-            type: 'welcome',
-            peers: this.peers,
-            ledger: this.ledger.blocks
-          }));
+        case "ready":
+          connection.send(
+            JSON.stringify({
+              type: "welcome",
+              peers: this.peers,
+              ledger: this.ledger.blocks
+            })
+          );
 
           break;
 
-        case 'welcome':
+        case "welcome":
           let candidateLedger = await Ledger.fromJSON(obj.ledger);
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
-            miner.postMessage('terminate');
-            this.ledgerCallback(this.ledger.ledger.map(block => block.data).join(' '));
+            miner.postMessage("terminate");
+            this.ledgerCallback(
+              this.ledger.ledger.map(block => block.data).join(" ")
+            );
           }
 
           for (let peer of obj.peers) {
@@ -128,31 +140,31 @@ class Client {
 
           break;
 
-        case 'block':
+        case "block":
           let block = Block.fromJSON(obj.block);
 
           if (await this.ledger.addBlock(block)) {
-            miner.postMessage('terminate');
+            miner.postMessage("terminate");
             this.wordCallback(block.data);
           }
 
           break;
 
-        case 'suggestion':
+        case "suggestion":
           // TODO: verify
           this.suggestionCallback(obj.word);
           break;
       }
     });
 
-    connection.on('close', () => {
+    connection.on("close", () => {
       removeFromArray(this.connections, connection);
       removeFromArray(this.peers, connection.peer);
 
       this._connect(connection.peer);
     });
 
-    connection.on('error', console.error);
+    connection.on("error", console.error);
   }
 }
 
