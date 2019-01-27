@@ -5,20 +5,8 @@ class Ledger {
     this.ledger = [genesis];
   }
 
-  static fromJSON(json) {
-    let ledger = new Ledger();
-
-    for (let jsonBlock of json) {
-      if (!ledger.addBlock(Block.fromJSON(jsonBlock))) {
-        return false;
-      }
-    }
-
-    return ledger;
-  }
-
-  addBlock(block) {
-    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid) {
+  async addBlock(block) {
+    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid || !(await block.isValidData())) {
       return false;
     }
 
@@ -38,6 +26,18 @@ class Ledger {
   get blocks() {
     return this.ledger.slice(1);
   }
+}
+
+Ledger.fromJSON = async function(json) {
+  let ledger = new Ledger();
+
+  for (let jsonBlock of json) {
+    if (!(await ledger.addBlock(Block.fromJSON(jsonBlock)))) {
+      return false;
+    }
+  }
+
+  return ledger;
 }
 
 module.exports = { Ledger };
