@@ -141,18 +141,41 @@ class Client {
 
           break;
 
-        case "block":
+        case 'getLedger':
+          connection.send(JSON.stringify({
+            type: 'ledger',
+            ledger: this.ledger.blocks
+          }));
+
+          break;
+
+        case 'ledger':
+          let candidateLedger = await Ledger.fromJSON(obj.ledger);
+
+          if (candidateLedger && candidateLedger.height > this.ledger.height) {
+            this.ledger = candidateLedger;
+            miner.postMessage('terminate');
+            this.ledgerCallback(this.ledger.ledger.map(block => block.data).join(' '));
+          }
+
+          break;
+
+        case 'block':
           let block = Block.fromJSON(obj.block);
 
           if (await this.ledger.addBlock(block)) {
             miner.postMessage("terminate");
             this.wordCallback(block.data);
+          } else {
+            // Query ledger to see if it's more up to date
+            connection.send(JSON.stringify({
+              type: 'getLedger'
+            }));
           }
 
           break;
 
         case "suggestion":
-          // TODO: verify
           this.suggestionCallback(obj.word);
           break;
       }
