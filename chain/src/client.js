@@ -49,10 +49,10 @@ class Client {
       this._connection_callback(connection);
     });
 
-    miner.addEventListener('message', event => {
+    miner.addEventListener('message', async event => {
       let block = Block.fromJSON(event.data);
 
-      if (this.ledger.addBlock(block)) {
+      if (await this.ledger.addBlock(block)) {
         this.wordCallback(block.data);
 
         this._broadcast(JSON.stringify({
@@ -100,7 +100,7 @@ class Client {
     this.peers.push(connection.peer);
     this.connections.push(connection);
 
-    connection.on('data', data => {
+    connection.on('data', async data => {
       let obj = JSON.parse(data);
 
       switch (obj.type) {
@@ -114,7 +114,7 @@ class Client {
           break;
 
         case 'welcome':
-          let candidateLedger = Ledger.fromJSON(obj.ledger);
+          let candidateLedger = await Ledger.fromJSON(obj.ledger);
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
@@ -131,7 +131,7 @@ class Client {
         case 'block':
           let block = Block.fromJSON(obj.block);
 
-          if (this.ledger.addBlock(block)) {
+          if (await this.ledger.addBlock(block)) {
             miner.postMessage('terminate');
             this.wordCallback(block.data);
           }
