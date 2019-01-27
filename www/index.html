@@ -12,72 +12,96 @@
     <title>blocktales</title>
   </head>
 
-  <body class="hide">
-    <h1>
-      <?xml version="1.0" encoding="iso-8859-1"?>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        version="1.1"
-        id="Capa_1"
-        x="0px"
-        y="0px"
-        viewBox="0 0 227 227"
-        style="enable-background:new 0 0 227 227;"
-        xml:space="preserve"
-        width="38px"
-        height="38px"
-      >
-        <g>
-          <path
-            d="M212,82v16h-12V88h-18V4H73.198L37,40.514V88H17v32h183v-7h27V82H212z M162,88H57V48.693L81.587,24H162V88z"
-            fill="#22292f"
-          />
-          <path
-            d="M209,131H10v35.113L0,201.029V223h219v-21.971l-10-34.916V131z M75,149h23v16H75V149z M53,204H30v-17h23V204z M53,165H30   v-16h23V165z M143,204H75v-17h68V204z M143,165h-24v-16h24V165z M187,204h-23v-17h23V204z M187,165h-23v-16h23V165z"
-            fill="#22292f"
-          />
-        </g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g>
-        <g></g></svg
-      ><span>blocktales</span>
-    </h1>
+  <body>
+    <div class="content hide">
+      <h1>
+        <?xml version="1.0" encoding="iso-8859-1"?>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          version="1.1"
+          id="Capa_1"
+          x="0px"
+          y="0px"
+          viewBox="0 0 227 227"
+          style="enable-background:new 0 0 227 227;"
+          xml:space="preserve"
+          width="38px"
+          height="38px"
+        >
+          <g>
+            <path
+              d="M212,82v16h-12V88h-18V4H73.198L37,40.514V88H17v32h183v-7h27V82H212z M162,88H57V48.693L81.587,24H162V88z"
+              fill="#22292f"
+            />
+            <path
+              d="M209,131H10v35.113L0,201.029V223h219v-21.971l-10-34.916V131z M75,149h23v16H75V149z M53,204H30v-17h23V204z M53,165H30   v-16h23V165z M143,204H75v-17h68V204z M143,165h-24v-16h24V165z M187,204h-23v-17h23V204z M187,165h-23v-16h23V165z"
+              fill="#22292f"
+            />
+          </g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g>
+          <g></g></svg
+        ><span>blocktales</span>
+      </h1>
 
-    <div class="page">
-      <p id="ledger">Once upon a time...</p>
-      <form id="textForm">
-        <div class="entry">
-          <input
-            type="text"
-            id="textEntry"
-            placeholder="what next..."
-            maxlength="20"
-            autocapitalize="none"
-          />
-          <div class="border"></div>
+      <div class="page">
+        <p id="ledger">Once upon a time...</p>
+        <form id="textForm">
+          <div class="entry">
+            <input
+              type="text"
+              id="textEntry"
+              placeholder="what next..."
+              maxlength="20"
+              autocapitalize="none"
+            />
+            <div class="border"></div>
+          </div>
+        </form>
+      </div>
+
+      <div class="suggestion" id="suggestion">
+        <h2>What other people are thinking...</h2>
+        <ul id="suggestionList"></ul>
+      </div>
+
+      <div class="notification">
+        <div class="la-ball-8bits">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
-      </form>
+        Mining
+      </div>
     </div>
 
-    <div class="suggestion" id="suggestion">
-      <h2>What other people are thinking...</h2>
-      <ul id="suggestionList"></ul>
-    </div>
-
-    <div class="notification">
+    <div class="loading show">
       <div class="la-ball-8bits">
         <div></div>
         <div></div>
@@ -96,7 +120,7 @@
         <div></div>
         <div></div>
       </div>
-      Mining
+      Loading
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>

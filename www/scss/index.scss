@@ -47,13 +47,15 @@ body {
   background: $light;
   color: $black;
 
-  opacity: 1;
-  visibility: visible;
-  transition: 0.2s all ease;
+  .content {
+    opacity: 1;
+    visibility: visible;
+    transition: 0.2s all ease;
 
-  &.hide {
-    visibility: hidden;
-    opacity: 0;
+    &.hide {
+      visibility: hidden;
+      opacity: 0;
+    }
   }
 
   &::after {
@@ -217,8 +219,8 @@ canvas {
   }
 }
 
-.notification {
-  position: relative;
+.notification,
+.loading {
   background: $black;
   color: white;
 
@@ -250,6 +252,14 @@ canvas {
     left: 50px;
     transform: scale(0.7);
   }
+}
+
+.loading {
+  top: 50% !important;
+  left: 50% !important;
+  bottom: initial !important;
+  right: initial !important;
+  transform: translate(-50%, -50%);
 }
 
 #suggestionList {
