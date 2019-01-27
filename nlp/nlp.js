@@ -1,5 +1,10 @@
 // use this one!
 async function validWord(sentenceSoFar, word) {
+
+    if (word.includes(" ") || word.length == 0) {
+        return false;
+    }
+
     sentenceSoFar = sentenceSoFar.trim();
     sentenceSoFar = sentenceSoFar.split(" ");
 
@@ -92,6 +97,10 @@ validWord("Once upon a", "ruski").then(result => result === false ? console.log(
 
 // Miss-spelling
 validWord("Once upon a", "tiem").then(result => result === false ? console.log("PASS") : console.log("FAIL"));
+// Expect: false
+
+// Space
+validWord("Once upon a", "time there").then(result => result === false ? console.log("PASS") : console.log("FAIL"));
 // Expect: false
 
 // TODO: can't start sentence with full stop
