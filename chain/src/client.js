@@ -25,6 +25,7 @@ class Client {
     this.peers = [];
     this.connections = [];
     this.ledger = new Ledger();
+    this.name = name;
 
     if (name) {
       this.peer = new Peer(name, CONNECTION_OPTIONS);
@@ -32,9 +33,13 @@ class Client {
       this.peer = new Peer(CONNECTION_OPTIONS);
     }
 
-    if (name !== KNOWN_PEER) {
-      this._connect(KNOWN_PEER);
-    }
+    this.peer.on('open', id => {
+      this.name = id;
+
+      if (this.name !== KNOWN_PEER) {
+        this._connect(KNOWN_PEER);
+      }
+    });
 
     this.peer.on('connection', connection => {
       this._connection_callback(connection);
@@ -43,8 +48,6 @@ class Client {
     miner.addEventListener('message', event => {
       if (this.ledger.addBlock(Block.fromJSON(event.data))) {
         for (let connection of this.connections) {
-          console.log(`Sending to ${connection.peer}`);
-
           connection.send(JSON.stringify({
             type: 'block',
             block: event.data
@@ -71,7 +74,6 @@ class Client {
   }
 
   _connection_callback(connection) {
-    console.log(`Connected to ${connection.peer}`);
     this.peers.push(connection.peer);
     this.connections.push(connection);
 
@@ -80,8 +82,6 @@ class Client {
 
       switch (obj.type) {
         case 'ready':
-          console.log(`Sending welcome pack to ${connection.peer}...`);
-
           connection.send(JSON.stringify({
             type: 'welcome',
             peers: this.peers,
@@ -95,12 +95,12 @@ class Client {
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
+            miner.send('terminate');
             // TODO: update GUI
           }
 
           for (let peer of obj.peers) {
-            if (!this.peers.includes(peer)) {
-              console.log(`Attempting connection to ${peer}`);
+            if (!this.peers.includes(peer) && peer !== this.name) {
               this._connect(peer);
             }
           }
@@ -110,7 +110,6 @@ class Client {
         case 'block':
           if (this.ledger.addBlock(Block.fromJSON(obj.block))) {
             miner.postMessage('terminate');
-            console.log(this.ledger.lastBlock);
           }
           break;
       }
