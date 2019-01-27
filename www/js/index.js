@@ -1,8 +1,14 @@
 require("../scss/index.scss");
+
+var chain = require("chain");
+
+var client = new chain.Client(add, loadLedger);
+
 var xss = require("xss");
+$("input").focus();
 
 function loadLedger(data) {
-  $("#ledger").append(data);
+  $("#ledger").text(data);
 }
 
 function resizeInput() {
@@ -12,6 +18,10 @@ function resizeInput() {
       "width",
       $("#textEntry").val().length * 1.2 + 2 + "em"
     );
+}
+
+function validWord() {
+  return true;
 }
 
 function verify(text) {
@@ -26,10 +36,16 @@ function verify(text) {
 addSuggestion("builder");
 
 function add(text) {
+  $("#textEntry").removeAttr("disabled");
+  $("#textEntry").val("");
+  resizeInput();
+  clearSuggestions();
+  $(".notification").removeClass("show");
+  $("input").focus();
   erase(3);
   if (text != ".") write(" " + text + "... ", -2);
   else write(text + "... ", -1);
-  //TODO GET NEW WORDS FROM BLOCKCHAIN
+  // TODO: GET NEW WORDS FROM BLOCKCHAIN
 }
 
 function write(text, i) {
@@ -80,17 +96,11 @@ $("#textEntry").keyup(resizeInput);
 
 $("#textForm").submit(function(e) {
   e.preventDefault();
-  var text = $("#textEntry").val();
+  var text = xss($("#textEntry").val());
   if (verify(text)) {
     $(".notification").addClass("show");
     $("#textEntry").attr("disabled", "disabled");
-    //TODO ADD TO BLOCKCHAIN
-    $("#textEntry").removeAttr("disabled");
-    $("#textEntry").val("");
-    resizeInput();
-    add(text);
-    clearSuggestions();
-    $(".notification").removeClass("show");
+    client.mineWord(text);
   } else {
     $("#textEntry").val("");
   }
