@@ -1,17 +1,28 @@
 require("../scss/index.scss");
 var xss = require("xss");
 
+function loadLedger(data) {
+  $("#ledger").append(data);
+}
+
 function resizeInput() {
-  if ($("#textEntry").val().length == 0) $(".entry").css("width", "");
-  else $(".entry").css("width", $("#textEntry").val().length * 1.2 + 2 + "em");
+  if ($("#textEntry").val().length == 0) $(".entry .border").css("width", "");
+  else
+    $(".entry .border").css(
+      "width",
+      $("#textEntry").val().length * 1.2 + 2 + "em"
+    );
 }
 
 function verify(text) {
-  //TODO VERIFY TEXT
-  return true;
+  return validWord(
+    $("#ledger")
+      .text()
+      .substring(0, $("#ledger").text().length - 3),
+    text
+  );
 }
 
-add("house");
 addSuggestion("builder");
 
 function add(text) {
@@ -43,10 +54,6 @@ function erase(i) {
     setTimeout(erase, 1, i);
   }
 }
-
-setTimeout(function() {
-  addSuggestion("hello");
-}, 5000);
 
 function addSuggestion(text) {
   $("#suggestionList").prepend("<li>" + xss(text) + "</li>\n");
@@ -89,8 +96,7 @@ $("#textForm").submit(function(e) {
   }
 });
 
-var msg = new SpeechSynthesisUtterance($("p").text());
-
 $(document).dblclick(function() {
+  var msg = new SpeechSynthesisUtterance($("p").text());
   window.speechSynthesis.speak(msg);
 });
