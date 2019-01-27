@@ -8,6 +8,7 @@ var xss = require("xss");
 $("input").focus();
 
 function loadLedger(data) {
+  $("body").removeClass("hide");
   $("#ledger").text(data + "...");
 }
 
