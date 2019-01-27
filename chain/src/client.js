@@ -21,11 +21,13 @@ function removeFromArray(arr, elem) {
 }
 
 class Client {
-  constructor(name = false) {
+  constructor(wordCallback, ledgerCallback, name = false) {
     this.peers = [];
     this.connections = [];
     this.ledger = new Ledger();
     this.name = name;
+    this.wordCallback = wordCallback;
+    this.ledgerCallback = ledgerCallback;
 
     if (name) {
       this.peer = new Peer(name, CONNECTION_OPTIONS);
@@ -46,7 +48,11 @@ class Client {
     });
 
     miner.addEventListener('message', event => {
-      if (this.ledger.addBlock(Block.fromJSON(event.data))) {
+      let block = Block.fromJSON(event.data);
+
+      if (this.ledger.addBlock(block)) {
+        this.wordCallback(block.data);
+
         for (let connection of this.connections) {
           connection.send(JSON.stringify({
             type: 'block',
@@ -95,7 +101,8 @@ class Client {
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
-            miner.send('terminate');
+            miner.postMessage('terminate');
+            this.ledgerCallback(this.ledger.ledger.map(block => block.data).join(' '));
             // TODO: update GUI
           }
 
@@ -108,9 +115,13 @@ class Client {
           break;
 
         case 'block':
-          if (this.ledger.addBlock(Block.fromJSON(obj.block))) {
+          let block = Block.fromJSON(obj.block);
+
+          if (this.ledger.addBlock(block)) {
             miner.postMessage('terminate');
+            this.wordCallback(block.data);
           }
+
           break;
       }
     });
