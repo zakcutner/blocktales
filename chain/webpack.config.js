@@ -8,7 +8,7 @@ module.exports = {
   mode: "production",
 
   entry: {
-    index: "./index.js"
+    index: "./server.js"
   },
 
   module: {
