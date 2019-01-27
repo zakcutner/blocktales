@@ -1,6 +1,6 @@
 # Blocktales
 
-Decentralised storytelling utilising blockchain technology. Available at blocktal.es
+Decentralised storytelling utilising blockchain technology. Available at [blocktales.ml](http://blocktales.ml)
 
 ## How it Works
 
