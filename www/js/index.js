@@ -2,7 +2,9 @@ require("../scss/index.scss");
 
 var chain = require("chain");
 var nlp = require("nlp");
+
 var client = new chain.Client(add, loadLedger, addSuggestion);
+var disabled = false;
 
 var xss = require("xss");
 $("input").focus();
@@ -32,6 +34,7 @@ async function verify(text) {
 
 function add(text) {
   $("#textEntry").removeAttr("disabled");
+  disabled = false;
   $("#textEntry").val("");
   resizeInput();
   clearSuggestions();
@@ -80,10 +83,12 @@ function clearSuggestions() {
 }
 
 $(document).on("click", ".suggestion li", function() {
-  var text = xss($(this).text());
-  $("#textEntry").val(text);
-  resizeInput();
-  $("#textForm").submit();
+  if (!disabled) {
+    var text = xss($(this).text());
+    $("#textEntry").val(text);
+    resizeInput();
+    $("#textForm").submit();
+  }
 });
 
 $("#textEntry").keyup(resizeInput);
@@ -96,6 +101,7 @@ $("#textForm").submit(function(e) {
     if (result) {
       $(".notification").addClass("show");
       $("#textEntry").attr("disabled", "disabled");
+      disabled = true;
       client.mineWord(text);
     } else {
       $(".entry").removeClass("shake");
