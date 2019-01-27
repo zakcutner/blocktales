@@ -11,6 +11,10 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
   mode: "production",
 
+  devServer: {
+    disableHostCheck: true
+  },
+
   entry: {
     index: "./js/index.js"
   },
