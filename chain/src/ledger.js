@@ -1,4 +1,5 @@
 let { Block, genesis } = require('./block');
+let { validWord } = require('nlp');
 
 class Ledger {
   constructor() {
@@ -6,13 +7,22 @@ class Ledger {
   }
 
   async addBlock(block) {
-    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid || !(await block.isValidData())) {
+    let valid = !(await validWord(this.toString(), block.data));
+
+    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid || valid) {
+      if (valid) {
+        console.log('Not valid word');
+      }
       return false;
     }
 
     this.ledger.push(block);
 
     return true;
+  }
+
+  toString() {
+    return this.ledger.map(block => block.data).join(' ');
   }
 
   get lastBlock() {

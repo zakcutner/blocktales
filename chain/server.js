@@ -21,7 +21,7 @@ if (location.hash === '#main') {
 } else if (location.hash === '#1') {
   client = new Client(wordCallback, ledgerCallback, suggestionCallback);
 
-  setTimeout(() => client.mineWord("stuff"), 1000)
+  setTimeout(() => client.mineWord('stuff'), 1000)
 
 } else {
   client = new Client(wordCallback, ledgerCallback, suggestionCallback);
