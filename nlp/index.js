@@ -34,7 +34,7 @@ export async function validWord(textSoFar, word) {
 
 
 function wordIsNaughty(word) {
-    return naughtyList.includes(word);
+    return naughtyList.includes(word.toLowerCase());
 }
 
 // returns promise
