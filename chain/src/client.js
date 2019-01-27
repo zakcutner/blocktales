@@ -81,7 +81,7 @@ class Client {
   }
 
   _connect(peer) {
-    if (this.fringe.includes(peer) || peer === this.name) {
+    if (this.peers.includes(peer) || this.fringe.includes(peer) || peer === this.name) {
       return;
     }
 
