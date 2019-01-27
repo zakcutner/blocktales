@@ -111,6 +111,7 @@ class Client {
 
     connection.on("data", async data => {
       let obj = JSON.parse(data);
+      let candidateLedger;
 
       switch (obj.type) {
         case "ready":
@@ -125,7 +126,7 @@ class Client {
           break;
 
         case "welcome":
-          let candidateLedger = await Ledger.fromJSON(obj.ledger);
+          candidateLedger = await Ledger.fromJSON(obj.ledger);
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
@@ -150,7 +151,7 @@ class Client {
           break;
 
         case 'ledger':
-          let candidateLedger = await Ledger.fromJSON(obj.ledger);
+          candidateLedger = await Ledger.fromJSON(obj.ledger);
 
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;

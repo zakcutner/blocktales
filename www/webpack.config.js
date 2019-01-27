@@ -60,7 +60,7 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Blocktales",
+      title: "blocktales",
       template: "./index.html",
       meta: {
         charset: "utf-8"
