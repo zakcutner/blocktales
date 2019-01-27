@@ -1,5 +1,5 @@
 // use this one!
-exports.validWord = async function (textSoFar, word) {
+validWord = async function (textSoFar, word) {
 
     var sentenceSoFar = getLastSentence(textSoFar);
     // pre-validate input

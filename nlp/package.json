@@ -1,22 +1,22 @@
 {
-  "name": "nlp",
-  "version": "1.0.0",
-  "description": "Validates word submissions to blocktales",
-  "main": "nlp.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zakcutner/blocktales.git"
-  },
-  "keywords": [
-    "nlp"
-  ],
-  "author": "Ivan Kapelyukh",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/zakcutner/blocktales/issues"
-  },
-  "homepage": "https://github.com/zakcutner/blocktales#readme"
+    "name": "nlp",
+    "version": "1.0.0",
+    "description": "Validates word submissions to blocktales",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/zakcutner/blocktales.git"
+    },
+    "keywords": [
+        "nlp"
+    ],
+    "author": "Ivan Kapelyukh",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/zakcutner/blocktales/issues"
+    },
+    "homepage": "https://github.com/zakcutner/blocktales#readme"
 }
