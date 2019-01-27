@@ -14,6 +14,8 @@ function suggestionCallback(word) {
   console.log('New suggestion: ' + word);
 }
 
+console.log("Page loaded.");
+
 if (location.hash === '#main') {
   client = new Client(wordCallback, ledgerCallback, suggestionCallback, 'main');
 } else if (location.hash === '#1') {
