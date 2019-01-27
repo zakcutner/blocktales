@@ -7,8 +7,7 @@ const KNOWN_PEER = 'main';
 const CONNECTION_OPTIONS = {
   host: '138.68.146.75',
   port: 8000,
-  path: '/',
-  secure: false
+  path: '/'
 };
 
 let miner = new Worker();
