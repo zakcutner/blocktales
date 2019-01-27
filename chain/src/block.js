@@ -1,6 +1,6 @@
 let hash = require('crypto-js').SHA256;
 
-const DIFFICULTY = 2;
+const DIFFICULTY = 5;
 
 class Block {
   constructor(prevBlock, data) {
@@ -31,6 +31,6 @@ class Block {
   }
 }
 
-const genesis = new Block({ hash: '', height: -1 }, 'Once upon a time,');
+const genesis = new Block({ hash: '', height: -1 }, 'Once upon a time');
 
 module.exports = { Block, genesis };
