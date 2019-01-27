@@ -1,10 +1,26 @@
 // use this one!
 async function validWord(sentenceSoFar, word) {
+    sentenceSoFar = sentenceSoFar.trim();
     sentenceSoFar = sentenceSoFar.split(" ");
+
+    var wholeSentence;
+    var sentenceEnd = false;
+    if (word === ".") {
+        sentenceEnd = true;
+        wholeSentence = sentenceSoFar;
+    } else if (word[word.length - 1] === ".") {
+        // skim off the full stop
+        word = word.substring(0, word.length - 1);
+        sentenceEnd = true;
+        wholeSentence = sentenceSoFar.concat([word]);
+    }
+
     let nice = !wordIsNaughty(word);
     let spelledCorrectly = await wordIsSpelledCorrectly(word);
-    let heuristicallyCorrect = passesGrammarHeuristics(sentenceSoFar, word);
-    return nice && spelledCorrectly && heuristicallyCorrect;
+    let partialHeuristicallyCorrect = passesPartialHeuristics(sentenceSoFar, word);
+
+    let holisticallyCorrect = sentenceEnd ? passesHolisticHeuristics(wholeSentence) : true;
+    return nice && spelledCorrectly && partialHeuristicallyCorrect && holisticallyCorrect;
 }
 
 
@@ -28,7 +44,6 @@ async function wordIsSpelledCorrectly(word) {
     try {
         let result = await fetch(joinedURL);
         let parsedResult = await result.json();
-        console.log(parsedResult);
         return parsedResult.length != 0;
     }
     catch (err) {
@@ -36,22 +51,43 @@ async function wordIsSpelledCorrectly(word) {
     }
 }
 
-function passesGrammarHeuristics(sentenceSoFar, newWord) {
+function passesPartialHeuristics(sentenceSoFar, newWord) {
     let lastWord = sentenceSoFar[sentenceSoFar.length - 1];
     let repeatsWord = lastWord === newWord;
 
-    let wholeSentence = sentenceSoFar.concat([newWord]);
-    let holisticallyCorrect = newWord === "." ? passesHolisticHeuristics(wholeSentence) : true;
-
-    return !repeatsWord && holisticallyCorrect;
+    return !repeatsWord;
 }
 
 function passesHolisticHeuristics(sentence) {
-    let lastWord = sentence[sentence.length - 2]; // very last word is actually "."
+    let lastWord = sentence[sentence.length - 1];
     let prepositions = ["a", "an", "the"];
     let endsInPreposition = prepositions.includes(lastWord);
 
     return !endsInPreposition;
 }
 
-// validWord("Once upon a time the", ".").then(result => console.log(result));
+// Valid sentence
+validWord("Once upon a time there was a", "hackathon.").then(result => console.log(result));
+// Expect: true
+
+// Repetition
+validWord("Once upon a time there was", "was").then(result => console.log(result));
+// Expect: false
+
+// Extra whitespace, with repetition
+validWord("Once upon a time there was ", "was").then(result => console.log(result));
+// Expect: false
+
+// Sentence terminating with preposition
+validWord("Once upon a time there was", "a.").then(result => console.log(result));
+// Expect: false
+
+// Sentence terminating with preposition, separate full stop
+validWord("Once upon a time there was a", ".").then(result => console.log(result));
+// Expect: false
+
+// Miss-spelling
+validWord("Once upon a", "tiem").then(result => console.log(result));
+// Expect: false
+
+// TODO: can't start sentence with full stop
