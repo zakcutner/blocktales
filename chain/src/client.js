@@ -22,6 +22,7 @@ function removeFromArray(arr, elem) {
 
 class Client {
   constructor(wordCallback, ledgerCallback, suggestionCallback, name = false) {
+    this.fringe = [];
     this.peers = [];
     this.connections = [];
     this.ledger = new Ledger();
@@ -80,9 +81,15 @@ class Client {
   }
 
   _connect(peer) {
+    if (this.peers.includes(peer) || this.fringe.includes(peer) || peer === this.name) {
+      return;
+    }
+
+    this.fringe.push(peer);
     let connection = this.peer.connect(peer);
 
     connection.on('open', () => {
+      removeFromArray(this.fringe, connection.peer);
       this._connection_callback(connection);
 
       connection.send(JSON.stringify({ type: 'ready' }));
@@ -113,13 +120,10 @@ class Client {
             this.ledger = candidateLedger;
             miner.postMessage('terminate');
             this.ledgerCallback(this.ledger.ledger.map(block => block.data).join(' '));
-            // TODO: update GUI
           }
 
           for (let peer of obj.peers) {
-            if (!this.peers.includes(peer) && peer !== this.name) {
-              this._connect(peer);
-            }
+            this._connect(peer);
           }
 
           break;
