@@ -42,7 +42,7 @@ function wordIsNaughty(word) {
 async function wordIsSpelledCorrectly(word) {
 
     let whitelist = [".", "I", "is", "by", "is", "who", "whom", "why"];
-    if (whitelist.includes(word)) {
+    if (whitelist.includes(word) || word.length <= 4) {
         return true;
     }
 
