@@ -1,6 +1,8 @@
 // use this one!
-async function validWord(sentenceSoFar, word) {
+async function validWord(textSoFar, word) {
 
+    var sentenceSoFar = getLastSentence(textSoFar);
+    // pre-validate input
     if (word.includes(" ") || word.length == 0) {
         return false;
     }
@@ -71,6 +73,17 @@ function passesHolisticHeuristics(sentence) {
     return !endsInPreposition;
 }
 
+function getLastSentence(text) {
+    for (var i = text.length - 1; i >= 0; i--) {
+        if (text[i] == ".") {
+            // skip the leading space
+            return text.substring(i + 2);
+        }
+    }
+
+    return text;
+}
+
 // Valid sentence
 validWord("Once upon a time there was a", "hackathon.").then(result => result === true ? console.log("PASS") : console.log("FAIL"));
 // Expect: true
@@ -102,6 +115,10 @@ validWord("Once upon a", "tiem").then(result => result === false ? console.log("
 // Space
 validWord("Once upon a", "time there").then(result => result === false ? console.log("PASS") : console.log("FAIL"));
 // Expect: false
+
+// Getting last sentence
+getLastSentence("Once upon. A time there was. Some dude") == "Some dude" ? console.log("PASS") : console.log("FAIL");
+// Expect: "Some dude"
 
 // TODO: can't start sentence with full stop
 // TODO: singular vs plural matching
