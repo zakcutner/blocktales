@@ -131,9 +131,9 @@ class Client {
           if (candidateLedger && candidateLedger.height > this.ledger.height) {
             this.ledger = candidateLedger;
             miner.postMessage("terminate");
-            this.ledgerCallback(
-              this.ledger.ledger.map(block => block.data).join(" ")
-            );
+            this.ledgerCallback(this.ledger.toString());
+          } else if (connection.peer === KNOWN_PEER && candidateLedger.height === 0) {
+            this.ledgerCallback(this.ledger.toString());
           }
 
           for (let peer of obj.peers) {
