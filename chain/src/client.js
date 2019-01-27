@@ -89,6 +89,7 @@ class Client {
     let connection = this.peer.connect(peer);
 
     connection.on('open', () => {
+      removeFromArray(this.fringe, connection.peer);
       this._connection_callback(connection);
 
       connection.send(JSON.stringify({ type: 'ready' }));
@@ -96,8 +97,6 @@ class Client {
   }
 
   _connection_callback(connection) {
-    removeFromArray(this.fringe, connection.peer);
-
     this.peers.push(connection.peer);
     this.connections.push(connection);
 
