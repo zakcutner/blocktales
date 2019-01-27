@@ -12,6 +12,7 @@ module.exports = {
   mode: "production",
 
   entry: {
+    polyfill: "babel-polyfill",
     index: "./js/index.js"
   },
 
