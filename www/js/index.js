@@ -8,7 +8,7 @@ var xss = require("xss");
 $("input").focus();
 
 function loadLedger(data) {
-  $("#ledger").text(data);
+  $("#ledger").text(data + "...");
 }
 
 function resizeInput() {
