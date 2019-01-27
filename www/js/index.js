@@ -1,7 +1,7 @@
 require("../scss/index.scss");
 
 var chain = require("chain");
-
+var nlp = require("nlp");
 var client = new chain.Client(add, loadLedger, addSuggestion);
 
 var xss = require("xss");
@@ -20,12 +20,8 @@ function resizeInput() {
     );
 }
 
-function validWord() {
-  return true;
-}
-
-function verify(text) {
-  return validWord(
+async function verify(text) {
+  return await nlp.validWord(
     $("#ledger")
       .text()
       .substring(0, $("#ledger").text().length - 3),
@@ -93,14 +89,21 @@ $("#textEntry").keyup(resizeInput);
 
 $("#textForm").submit(function(e) {
   e.preventDefault();
+
   var text = xss($("#textEntry").val());
-  if (verify(text)) {
-    $(".notification").addClass("show");
-    $("#textEntry").attr("disabled", "disabled");
-    client.mineWord(text);
-  } else {
-    $("#textEntry").val("");
-  }
+  verify(text).then(result => {
+    if (result) {
+      $(".notification").addClass("show");
+      $("#textEntry").attr("disabled", "disabled");
+      client.mineWord(text);
+    } else {
+      $(".entry").removeClass("shake");
+
+      setTimeout(function() {
+        $(".entry").addClass("shake");
+      }, 1);
+    }
+  });
 });
 
 $(document).dblclick(function() {
