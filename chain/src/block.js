@@ -1,5 +1,4 @@
 let hash = require('crypto-js').SHA256;
-let { validWord } = require('nlp');
 
 const DIFFICULTY = 5;
 
@@ -29,10 +28,6 @@ class Block {
 
   get isValid() {
     return this.hash.startsWith('0'.repeat(DIFFICULTY));
-  }
-
-  async isValidData() {
-    return await validWord(this.data);
   }
 }
 
