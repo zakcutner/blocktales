@@ -41,8 +41,8 @@ function wordIsNaughty(word) {
 // idea: if word is spelled correctly, then at least some word will have a similar meaning
 async function wordIsSpelledCorrectly(word) {
 
-    let whitelist = [".", "I", "is", "by", "is"];
-    if (whitelist.includes(word)) {
+    let whitelist = [".", "I", "is", "by", "is", "who", "whom", "why"];
+    if (whitelist.includes(word) || word.length <= 4) {
         return true;
     }
 
