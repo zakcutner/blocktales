@@ -2,7 +2,7 @@ require("../scss/index.scss");
 
 var chain = require("chain");
 
-var client = new chain.Client(add, loadLedger);
+var client = new chain.Client(add, loadLedger, addSuggestion);
 
 var xss = require("xss");
 $("input").focus();
