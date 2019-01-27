@@ -85,7 +85,7 @@ class Client {
       return;
     }
 
-    fringe.push(peer);
+    this.fringe.push(peer);
     let connection = this.peer.connect(peer);
 
     connection.on('open', () => {
