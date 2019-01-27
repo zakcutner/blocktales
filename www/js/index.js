@@ -84,7 +84,6 @@ function clearSuggestions() {
 
 $(document).on("click", ".suggestion li", function() {
   var text = xss($(this).text());
-  console.log(text);
   $("#textEntry").val(text);
   resizeInput();
   $("#textForm").submit();
