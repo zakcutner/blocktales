@@ -1,6 +1,6 @@
 let hash = require('crypto-js').SHA256;
 
-const DIFFICULTY = 5;
+const DIFFICULTY = 2;
 
 class Block {
   constructor(prevBlock, data) {

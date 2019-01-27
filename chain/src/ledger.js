@@ -36,7 +36,7 @@ class Ledger {
   }
 
   get blocks() {
-    return JSON.stringify(this.ledger.slice(1));
+    return this.ledger.slice(1);
   }
 }
 
