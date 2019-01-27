@@ -29,11 +29,11 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 50vh;
+    height: 350px;
     background: linear-gradient(
       to bottom,
       rgba(white, 1) 40%,
-      rgba(white, 0) 90%
+      rgba(white, 0) 100%
     );
     z-index: 10;
   }
@@ -63,22 +63,22 @@ h1 {
   display: inline-block;
   position: relative;
   padding-bottom: 10px;
-  width: 19em;
-  transition: 0.1s ease width;
 
-  &:after {
-    content: "";
+  .border {
     position: absolute;
 
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
 
     height: 3px;
+    width: 19em;
     border-radius: 50%;
 
     background: $black;
     z-index: 100;
+
+    transition: 0.1s ease width;
   }
 }
 
@@ -120,17 +120,6 @@ form {
     position: relative;
     z-index: 9;
   }
-}
-
-.entry {
-  /*
-  border-bottom-style: solid;
-  border-bottom: 3px;
-  border-top: 0px;
-  border-left: 0px;
-  border-right: 0px;
-  border-color: #000;
-  */
 }
 
 canvas {
