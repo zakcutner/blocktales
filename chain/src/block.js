@@ -10,11 +10,23 @@ class Block {
     this.nonce = 0;
   }
 
+  static fromJSON(json) {
+    const mockPrevBlock = {
+      hash: json.prevHash,
+      height: json.height - 1
+    };
+    let block = new Block(mockPrevBlock, json.data);
+
+    block.nonce = json.nonce;
+
+    return block;
+  }
+
   get hash() {
     return hash(JSON.stringify(this)).toString();
   }
 
-  get validHash() {
+  get isValid() {
     return this.hash.startsWith('0'.repeat(DIFFICULTY));
   }
 }

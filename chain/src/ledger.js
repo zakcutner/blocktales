@@ -1,15 +1,24 @@
-let { genesis } = require('./block');
+let { Block, genesis } = require('./block');
 
 class Ledger {
   constructor() {
     this.ledger = [genesis];
   }
 
-  addBlock(block) {
-    let prevBlock = ledger[-1];
+  static fromJSON(json) {
+    let ledger = new Ledger();
 
-    // TODO: verify data validity
-    if (prevBlock.hash !== block.prevHash || prevBlock.height + 1 !== block.height || !block.validHash) {
+    for (let jsonBlock of json) {
+      if (!ledger.addBlock(Block.fromJSON(jsonBlock))) {
+        return false;
+      }
+    }
+
+    return ledger;
+  }
+
+  addBlock(block) {
+    if (this.lastBlock.hash !== block.prevHash || this.height + 1 !== block.height || !block.isValid) {
       return false;
     }
 
@@ -17,4 +26,18 @@ class Ledger {
 
     return true;
   }
+
+  get lastBlock() {
+    return this.ledger[this.ledger.length - 1];
+  }
+
+  get height() {
+    return this.lastBlock.height;
+  }
+
+  get blocks() {
+    return JSON.stringify(this.ledger.slice(1));
+  }
 }
+
+module.exports = { Ledger };
