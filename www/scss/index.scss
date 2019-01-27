@@ -46,6 +46,15 @@ body {
   background: $light;
   color: $black;
 
+  opacity: 1;
+  visibility: visible;
+  transition: 0.2s all ease;
+
+  &.hide {
+    visibility: hidden;
+    opacity: 0;
+  }
+
   &::after {
     content: "";
     position: fixed;
