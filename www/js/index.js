@@ -33,8 +33,6 @@ function verify(text) {
   );
 }
 
-addSuggestion("builder");
-
 function add(text) {
   $("#textEntry").removeAttr("disabled");
   $("#textEntry").val("");
