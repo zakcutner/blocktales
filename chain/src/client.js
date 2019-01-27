@@ -4,6 +4,7 @@ const { Ledger } = require("./ledger");
 const Worker = require("./miner.worker");
 
 const KNOWN_PEER = "main";
+const KNOWN_PEER_ALT = "main-alt";
 const CONNECTION_OPTIONS = {
   host: "broker.blocktales.ml",
   port: 80,
@@ -43,6 +44,10 @@ class Client {
 
       if (this.name !== KNOWN_PEER) {
         this._connect(KNOWN_PEER);
+      }
+
+      if (this.name !== KNOWN_PEER_ALT) {
+        this._connect(KNOWN_PEER_ALT);
       }
     });
 
@@ -102,6 +107,8 @@ class Client {
       return;
     }
 
+    connection.on("error", console.error);
+
     this.fringe.push(peer);
 
     connection.on("open", () => {
@@ -139,7 +146,7 @@ class Client {
             this.ledger = candidateLedger;
             miner.postMessage("terminate");
             this.ledgerCallback(this.ledger.toString());
-          } else if (connection.peer === KNOWN_PEER && candidateLedger.height === 0) {
+          } else if ((connection.peer === KNOWN_PEER || connection.peer === KNOWN_PEER_ALT) && candidateLedger.height === 0) {
             this.ledgerCallback(this.ledger.toString());
           }
 
@@ -193,7 +200,7 @@ class Client {
       removeFromArray(this.connections, connection);
       removeFromArray(this.peers, connection.peer);
 
-      // this._connect(connection.peer);
+      this._connect(connection.peer);
     });
 
     connection.on("error", console.error);

@@ -18,6 +18,8 @@ console.log("Page loaded.");
 
 if (location.hash === '#main') {
   client = new Client(wordCallback, ledgerCallback, suggestionCallback, 'main');
+} else if (location.hash === '#main-alt') {
+  client = new Client(wordCallback, ledgerCallback, suggestionCallback, 'main-alt');
 } else if (location.hash === '#1') {
   client = new Client(wordCallback, ledgerCallback, suggestionCallback);
 
