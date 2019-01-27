@@ -31,6 +31,6 @@ class Block {
   }
 }
 
-const genesis = new Block({ hash: '', height: -1 }, 'Once upon a time,');
+const genesis = new Block({ hash: '', height: -1 }, 'Once upon a time');
 
 module.exports = { Block, genesis };
