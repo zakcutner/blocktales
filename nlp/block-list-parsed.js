@@ -1,4 +1,4 @@
-naughtyList = ["4r5e",
+export let naughtyList = ["4r5e",
     "50 yard cunt punt",
     "5h1t",
     "5hit",

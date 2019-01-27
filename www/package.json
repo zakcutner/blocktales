@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "xss": "^1.0.3",
-    "chain": "file:../chain"
+    "chain": "file:../chain",
+    "nlp": "file:../nlp"
   }
 }
